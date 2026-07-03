@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { logout } from '@/app/(dashboard)/logout-action'
+import { logout } from '@/app/dashboard/logout-action'
 import { 
   Building2, 
   LayoutDashboard, 
