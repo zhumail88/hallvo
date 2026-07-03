@@ -8,7 +8,7 @@ import {
   Settings2, 
   Plus, 
   Users, 
-  DollarSign, 
+  Banknote, 
   Loader2, 
   Check, 
   ShieldAlert,
@@ -235,7 +235,7 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
                         Max Capacity: {h.capacity} guests
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <DollarSign className="h-4 w-4 text-primary" />
+                        <Banknote className="h-4 w-4 text-primary" />
                         Base Rent: {formatCurrency(h.base_price)}
                       </div>
                     </div>

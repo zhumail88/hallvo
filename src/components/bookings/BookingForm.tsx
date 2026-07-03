@@ -16,7 +16,7 @@ import {
   Users, 
   Building, 
   Settings2,
-  DollarSign,
+  Banknote,
   Plus,
   Trash2,
   Loader2,
@@ -672,7 +672,7 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
                       <div className="w-32">
                         <label className="block text-[10px] font-bold text-muted-foreground uppercase">Price (PKR)</label>
                         <div className="relative">
-                          <DollarSign className="absolute left-1.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
+                          <Banknote className="absolute left-1.5 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
                           <input
                             type="number"
                             value={item.unit_price}
@@ -725,7 +725,7 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
         <div className="space-y-6">
           <div className="rounded-2xl border border-border bg-card p-6 shadow-md space-y-6 sticky top-6">
             <h2 className="text-lg font-bold text-primary flex items-center gap-2 border-b border-border pb-3">
-              <DollarSign className="h-5 w-5" />
+              <Banknote className="h-5 w-5" />
               4. Pricing & Payments
             </h2>
 

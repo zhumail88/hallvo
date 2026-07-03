@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { 
   Calendar as CalendarIcon, 
-  DollarSign, 
+  Banknote, 
   Users, 
   TrendingUp, 
   ArrowUpRight, 
@@ -161,7 +161,7 @@ export default async function DashboardPage() {
               Monthly Revenue
             </span>
             <div className="p-3 bg-emerald-500/10 text-emerald-600 rounded-xl">
-              <DollarSign className="h-6 w-6" />
+              <Banknote className="h-6 w-6" />
             </div>
           </div>
           <div className="mt-4">
