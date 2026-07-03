@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { formatPKR } from '@/lib/utils'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { toast } from 'sonner'
@@ -95,6 +95,7 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
     handleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
@@ -735,13 +736,20 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
               {/* Base Hall Amount (Editable) */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-muted-foreground uppercase">Base Hall Rate (PKR)</label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    {...register('base_amount')}
-                    className="flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2 font-bold text-foreground focus-visible:ring-2"
-                  />
-                </div>
+                <Controller
+                  name="base_amount"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={field.value ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Number(field.value)) : ''}
+                      onChange={(e) => field.onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                      onBlur={field.onBlur}
+                      className="flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2 font-bold text-foreground focus-visible:ring-2"
+                    />
+                  )}
+                />
                 {errors.base_amount && (
                   <p className="text-xs text-destructive font-semibold">{errors.base_amount.message}</p>
                 )}
@@ -758,10 +766,19 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
               {/* Discount Amount */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-muted-foreground uppercase">Manual Discount / Rebate (PKR)</label>
-                <input
-                  type="number"
-                  {...register('discount_amount')}
-                  className="flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2 font-bold text-foreground focus-visible:ring-2"
+                <Controller
+                  name="discount_amount"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={field.value ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Number(field.value)) : '0'}
+                      onChange={(e) => field.onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                      onBlur={field.onBlur}
+                      className="flex h-11 w-full rounded-xl border border-input bg-background px-4 py-2 font-bold text-foreground focus-visible:ring-2"
+                    />
+                  )}
                 />
                 {errors.discount_amount && (
                   <p className="text-xs text-destructive font-semibold">{errors.discount_amount.message}</p>
@@ -786,20 +803,38 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
               {/* Final Amount */}
               <div className="space-y-1 bg-primary/10 border border-primary/20 p-4 rounded-xl">
                 <span className="block text-xs font-bold text-primary uppercase">Final Calculated Amount</span>
-                <input
-                  type="number"
-                  {...register('final_amount')}
-                  className="w-full bg-transparent border-0 p-0 text-2xl font-black text-primary focus:outline-none"
+                <Controller
+                  name="final_amount"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={field.value ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Number(field.value)) : '0'}
+                      onChange={(e) => field.onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                      onBlur={field.onBlur}
+                      className="w-full bg-transparent border-0 p-0 text-2xl font-black text-primary focus:outline-none"
+                    />
+                  )}
                 />
               </div>
 
               {/* Advance Paid */}
               <div className="space-y-1">
                 <label className="text-xs font-bold text-muted-foreground uppercase">Advance Deposit Paid (PKR)</label>
-                <input
-                  type="number"
-                  {...register('advance_paid')}
-                  className="flex h-11 w-full rounded-xl border border-input bg-emerald-500/5 font-extrabold text-emerald-700 px-4 py-2 focus-visible:ring-2 focus-visible:ring-ring"
+                <Controller
+                  name="advance_paid"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={field.value ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(Number(field.value)) : '0'}
+                      onChange={(e) => field.onChange(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
+                      onBlur={field.onBlur}
+                      className="flex h-11 w-full rounded-xl border border-input bg-emerald-500/5 font-extrabold text-emerald-700 px-4 py-2 focus-visible:ring-2 focus-visible:ring-ring"
+                    />
+                  )}
                 />
                 {errors.advance_paid && (
                   <p className="text-xs text-destructive font-semibold">{errors.advance_paid.message}</p>

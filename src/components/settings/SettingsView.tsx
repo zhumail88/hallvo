@@ -270,11 +270,11 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
               <div className="space-y-1.5">
                 <label className="font-bold text-foreground">Default Base Rent (PKR) *</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   required
-                  min="1000"
-                  value={newHallBasePrice}
-                  onChange={(e) => setNewHallBasePrice(Number(e.target.value))}
+                  value={newHallBasePrice ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(newHallBasePrice) : ''}
+                  onChange={(e) => setNewHallBasePrice(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
                   className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
                 />
               </div>
@@ -370,11 +370,11 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
               <div className="space-y-1.5">
                 <label className="font-bold text-foreground">Standard Rate (PKR) *</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
                   required
-                  min="0"
-                  value={newAddonPrice}
-                  onChange={(e) => setNewAddonPrice(Number(e.target.value))}
+                  value={newAddonPrice ? new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(newAddonPrice) : ''}
+                  onChange={(e) => setNewAddonPrice(Number(e.target.value.replace(/[^0-9]/g, '')) || 0)}
                   className="flex h-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
                 />
               </div>
