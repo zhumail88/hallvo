@@ -92,6 +92,17 @@ alter table public.booking_addons enable row level security;
 alter table public.receipts enable row level security;
 alter table public.activity_logs enable row level security;
 
+-- Helper function to check if user is an admin without triggering RLS recursion
+create or replace function public.is_admin()
+returns boolean as $$
+begin
+  return exists (
+    select 1 from public.profiles
+    where id = auth.uid() and role = 'admin'
+  );
+end;
+$$ language plpgsql security definer;
+
 -- Create RLS Policies
 
 -- Profiles:
@@ -105,12 +116,7 @@ create policy "Users can update their own profile" on public.profiles
 
 -- Admins can do anything with profiles
 create policy "Admins have full access to profiles" on public.profiles
-  for all using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role = 'admin'
-    )
-  );
+  for all using (public.is_admin());
 
 -- Halls:
 -- Authenticated users can read halls
@@ -119,12 +125,7 @@ create policy "Authenticated users can read halls" on public.halls
 
 -- Only admins can modify halls
 create policy "Admins can modify halls" on public.halls
-  for all using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role = 'admin'
-    )
-  );
+  for all using (public.is_admin());
 
 -- Addons:
 -- Authenticated users can read addons
@@ -133,12 +134,7 @@ create policy "Authenticated users can read addons" on public.addons
 
 -- Only admins can modify addons
 create policy "Admins can modify addons" on public.addons
-  for all using (
-    exists (
-      select 1 from public.profiles
-      where id = auth.uid() and role = 'admin'
-    )
-  );
+  for all using (public.is_admin());
 
 -- Bookings:
 -- Authenticated users can read bookings
