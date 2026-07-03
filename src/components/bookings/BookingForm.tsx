@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { formatPKR } from '@/lib/utils'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -699,7 +700,7 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
                       <div className="w-24 text-right">
                         <span className="block text-[10px] font-bold text-muted-foreground uppercase">Sum</span>
                         <span className="text-sm font-bold text-foreground">
-                          {new Intl.NumberFormat('en-PK', { maximumFractionDigits: 0 }).format(item.total_price)}
+                          {formatPKR(item.total_price)}
                         </span>
                       </div>
 
@@ -750,7 +751,7 @@ export default function BookingForm({ halls, addons, initialBooking, initialAddo
               <div className="flex justify-between items-center py-2 border-b border-border">
                 <span className="font-semibold text-muted-foreground">Addons Package Total</span>
                 <span className="font-extrabold text-foreground">
-                  {new Intl.NumberFormat('en-PK', { style: 'currency', currency: 'PKR', maximumFractionDigits: 0 }).format(watchedAddonAmount)}
+                  {formatPKR(watchedAddonAmount)}
                 </span>
               </div>
 

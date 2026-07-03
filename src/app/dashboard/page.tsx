@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
+import { formatPKR } from '@/lib/utils'
 import { 
   Calendar as CalendarIcon, 
   Banknote, 
@@ -95,13 +96,6 @@ export default async function DashboardPage() {
     100
   )
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   return (
     <div className="space-y-8">
@@ -166,7 +160,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-4">
             <span className="text-3xl font-black text-foreground">
-              {formatCurrency(monthlyRevenue)}
+              {formatPKR(monthlyRevenue)}
             </span>
             <span className="block text-sm text-muted-foreground mt-1">
               Confirmed / completed this month
@@ -206,7 +200,7 @@ export default async function DashboardPage() {
           </div>
           <div className="mt-4">
             <span className="text-3xl font-black text-foreground">
-              {formatCurrency(pendingPayments)}
+              {formatPKR(pendingPayments)}
             </span>
             <span className="block text-sm text-muted-foreground mt-1">
               Outstanding receivables

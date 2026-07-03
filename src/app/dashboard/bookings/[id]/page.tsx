@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { format, parseISO } from 'date-fns'
+import { formatPKR } from '@/lib/utils'
 
 interface BookingDetailPageProps {
   params: Promise<{
@@ -58,13 +59,6 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
   const activityLogs = logs || []
   const balanceDue = Number(booking.final_amount) - Number(booking.advance_paid)
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   // WhatsApp Pre-filled message generator
   // Formatting string for wedding details
@@ -76,9 +70,9 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
       `*Date:* ${dateStr}\n` +
       `*Time:* ${timeStr}\n` +
       `*Guests:* ${booking.guests_count}\n` +
-      `*Total Amount:* ${formatCurrency(booking.final_amount)}\n` +
-      `*Advance Paid:* ${formatCurrency(booking.advance_paid)}\n` +
-      `*Remaining Balance:* ${formatCurrency(balanceDue)}\n\n` +
+      `*Total Amount:* ${formatPKR(booking.final_amount)}\n` +
+      `*Advance Paid:* ${formatPKR(booking.advance_paid)}\n` +
+      `*Remaining Balance:* ${formatPKR(balanceDue)}\n\n` +
       `Thank you for choosing us! Let us know if you have any questions.`
     
     // Clean phone number: remove non-digits
@@ -227,9 +221,9 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
                       <td className="p-3 font-bold text-foreground">
                         {booking.halls?.name} - Base Hall Rental
                       </td>
-                      <td className="p-3 text-right">{formatCurrency(booking.base_amount)}</td>
+                      <td className="p-3 text-right">{formatPKR(booking.base_amount)}</td>
                       <td className="p-3 text-center">1</td>
-                      <td className="p-3 text-right font-bold text-foreground">{formatCurrency(booking.base_amount)}</td>
+                      <td className="p-3 text-right font-bold text-foreground">{formatPKR(booking.base_amount)}</td>
                     </tr>
 
                     {/* Addons mapping */}
@@ -241,9 +235,9 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
                             Pricing: {item.addons?.pricing_type === 'per_guest' ? 'Per Guest head count' : 'Fixed package fee'}
                           </span>
                         </td>
-                        <td className="p-3 text-right">{formatCurrency(item.unit_price)}</td>
+                        <td className="p-3 text-right">{formatPKR(item.unit_price)}</td>
                         <td className="p-3 text-center">{item.quantity}</td>
-                        <td className="p-3 text-right font-bold text-foreground">{formatCurrency(item.total_price)}</td>
+                        <td className="p-3 text-right font-bold text-foreground">{formatPKR(item.total_price)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -271,17 +265,17 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
               <div className="w-full sm:w-64 space-y-2 font-semibold text-foreground">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Hall Base Rate:</span>
-                  <span>{formatCurrency(booking.base_amount)}</span>
+                  <span>{formatPKR(booking.base_amount)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Addons Subtotal:</span>
-                  <span>{formatCurrency(booking.addon_amount)}</span>
+                  <span>{formatPKR(booking.addon_amount)}</span>
                 </div>
                 {Number(booking.discount_amount) > 0 && (
                   <div className="space-y-1">
                     <div className="flex justify-between text-destructive">
                       <span>Discount / Rebate:</span>
-                      <span>-{formatCurrency(booking.discount_amount)}</span>
+                      <span>-{formatPKR(booking.discount_amount)}</span>
                     </div>
                     {booking.discount_reason && (
                       <div className="text-[10px] font-bold text-destructive/80 text-right italic">
@@ -293,19 +287,19 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
                 
                 <div className="flex justify-between text-base font-black border-t border-border pt-2 text-primary">
                   <span>Grand Total:</span>
-                  <span>{formatCurrency(booking.final_amount)}</span>
+                  <span>{formatPKR(booking.final_amount)}</span>
                 </div>
 
                 <div className="flex justify-between text-emerald-600 font-bold border-b border-border/50 pb-2">
                   <span>Advance Deposit Paid:</span>
-                  <span>{formatCurrency(booking.advance_paid)}</span>
+                  <span>{formatPKR(booking.advance_paid)}</span>
                 </div>
 
                 <div className={`flex justify-between font-black text-base py-1 ${
                   balanceDue > 0 ? 'text-amber-600' : 'text-emerald-700'
                 }`}>
                   <span>Balance Due:</span>
-                  <span>{formatCurrency(Math.max(0, balanceDue))}</span>
+                  <span>{formatPKR(Math.max(0, balanceDue))}</span>
                 </div>
               </div>
             </div>
@@ -364,10 +358,10 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
                         {log.details && (
                           <div className="mt-2 text-xs p-2 bg-secondary/50 rounded-lg border border-border/40 font-mono text-muted-foreground leading-normal">
                             {log.details.final_amount !== undefined && (
-                              <div>Total: {formatCurrency(log.details.final_amount)}</div>
+                              <div>Total: {formatPKR(log.details.final_amount)}</div>
                             )}
                             {log.details.advance_paid !== undefined && (
-                              <div>Paid: {formatCurrency(log.details.advance_paid)}</div>
+                              <div>Paid: {formatPKR(log.details.advance_paid)}</div>
                             )}
                             {log.action === 'details_updated' && (
                               <div>Records adjusted</div>

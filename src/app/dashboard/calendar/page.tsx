@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { formatPKR } from '@/lib/utils'
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -149,13 +150,6 @@ export default function CalendarPage() {
     setIsBookingModalOpen(true)
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   return (
     <div className="space-y-6">
@@ -442,19 +436,19 @@ export default function CalendarPage() {
                     <div className="p-3 bg-secondary/50 rounded-xl text-center">
                       <span className="block text-xs font-medium text-muted-foreground">Total Price</span>
                       <span className="text-base font-extrabold text-foreground mt-1 block">
-                        {formatCurrency(selectedBooking.final_amount)}
+                        {formatPKR(selectedBooking.final_amount)}
                       </span>
                     </div>
                     <div className="p-3 bg-emerald-500/5 border border-emerald-100 rounded-xl text-center">
                       <span className="block text-xs font-medium text-emerald-700">Advance Paid</span>
                       <span className="text-base font-extrabold text-emerald-700 mt-1 block">
-                        {formatCurrency(selectedBooking.advance_paid)}
+                        {formatPKR(selectedBooking.advance_paid)}
                       </span>
                     </div>
                     <div className="p-3 bg-amber-500/5 border border-amber-100 rounded-xl text-center">
                       <span className="block text-xs font-medium text-amber-700">Remaining Due</span>
                       <span className="text-base font-extrabold text-amber-700 mt-1 block">
-                        {formatCurrency(Math.max(0, selectedBooking.final_amount - selectedBooking.advance_paid))}
+                        {formatPKR(Math.max(0, selectedBooking.final_amount - selectedBooking.advance_paid))}
                       </span>
                     </div>
                   </div>

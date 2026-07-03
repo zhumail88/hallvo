@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { formatPKR } from '@/lib/utils'
 import { 
   Building, 
   Settings2, 
@@ -159,13 +160,6 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
     }
   }
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   return (
     <div className="space-y-6">
@@ -236,7 +230,7 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Banknote className="h-4 w-4 text-primary" />
-                        Base Rent: {formatCurrency(h.base_price)}
+                        Base Rent: {formatPKR(h.base_price)}
                       </div>
                     </div>
                   </div>
@@ -326,7 +320,7 @@ export default function SettingsView({ halls: initialHalls, addons: initialAddon
 
                   <div className="flex items-center gap-4">
                     <span className="font-bold text-foreground text-sm">
-                      {formatCurrency(a.price)}
+                      {formatPKR(a.price)}
                     </span>
                     <Button
                       variant={a.is_active ? 'outline' : 'secondary'}

@@ -158,9 +158,9 @@ const styles = StyleSheet.create({
   }
 })
 
-// Currency Formatting inside PDF
+// Currency Formatting inside PDF (en-IN gives South Asian xx,xx,xxx grouping)
 const formatPKR = (val: number) => {
-  return `PKR ${new Intl.NumberFormat('en-PK', { maximumFractionDigits: 0 }).format(val)}`
+  return `PKR ${new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 }).format(val)}`
 }
 
 // React Document to render inside @react-pdf/renderer

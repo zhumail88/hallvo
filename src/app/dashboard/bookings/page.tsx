@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { format } from 'date-fns'
+import { formatPKR } from '@/lib/utils'
 
 interface BookingsPageProps {
   searchParams: Promise<{
@@ -115,13 +116,6 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
 
   const bookings = bookingsData || []
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat('en-PK', {
-      style: 'currency',
-      currency: 'PKR',
-      maximumFractionDigits: 0
-    }).format(val)
-  }
 
   return (
     <div className="space-y-6">
@@ -295,13 +289,13 @@ export default async function BookingsPage({ searchParams }: BookingsPageProps) 
 
                       {/* Financials (PKR) */}
                       <td className="p-4 font-bold text-foreground">
-                        <div>Total: {formatCurrency(b.final_amount)}</div>
+                        <div>Total: {formatPKR(b.final_amount)}</div>
                         <div className="text-xs font-medium text-emerald-600 mt-0.5">
-                          Paid: {formatCurrency(b.advance_paid)}
+                          Paid: {formatPKR(b.advance_paid)}
                         </div>
                         {unpaidAmount > 0 && (
                           <div className="text-xs font-medium text-amber-600 mt-0.5">
-                            Due: {formatCurrency(unpaidAmount)}
+                            Due: {formatPKR(unpaidAmount)}
                           </div>
                         )}
                       </td>
