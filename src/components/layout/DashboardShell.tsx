@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { logout } from '@/app/dashboard/logout-action'
@@ -13,7 +13,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  User
+  User,
+  Loader2
 } from 'lucide-react'
 
 interface DashboardShellProps {
@@ -27,6 +28,11 @@ interface DashboardShellProps {
 export default function DashboardShell({ children, profile }: DashboardShellProps) {
   const pathname = usePathname()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [loadingHref, setLoadingHref] = useState<string | null>(null)
+
+  useEffect(() => {
+    setLoadingHref(null)
+  }, [pathname])
 
   const navItems = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
@@ -34,6 +40,13 @@ export default function DashboardShell({ children, profile }: DashboardShellProp
     { name: 'Bookings', href: '/dashboard/bookings', icon: FileText },
     { name: 'Settings', href: '/dashboard/settings', icon: SettingsIcon },
   ]
+
+  const handleLinkClick = (href: string) => {
+    if (href !== pathname) {
+      setLoadingHref(href)
+    }
+    setIsSidebarOpen(false)
+  }
 
   const handleLogout = async () => {
     if (confirm('Are you sure you want to sign out?')) {
@@ -44,13 +57,20 @@ export default function DashboardShell({ children, profile }: DashboardShellProp
   return (
     <div className="min-h-screen bg-background flex flex-col md:flex-row">
       
+      {/* Top YouTube-style progress bar */}
+      {loadingHref && (
+        <div className="fixed top-0 left-0 right-0 h-[3px] bg-secondary/35 z-50 overflow-hidden">
+          <div className="absolute top-0 bottom-0 bg-gradient-to-r from-primary via-accent to-primary animate-progress rounded-r-full" />
+        </div>
+      )}
+      
       {/* Mobile Top Header */}
       <header className="flex h-16 items-center justify-between border-b border-border bg-card px-6 md:hidden z-20 sticky top-0">
         <div className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground">
             <Building2 className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold text-primary">Hallvo</span>
+          <span className="text-xl font-bold text-gradient">Hallvo</span>
         </div>
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -73,7 +93,7 @@ export default function DashboardShell({ children, profile }: DashboardShellProp
             <Building2 className="h-6 w-6" />
           </div>
           <div>
-            <span className="text-2xl font-black tracking-tight text-primary">Hallvo</span>
+            <span className="text-2xl font-black tracking-tight text-gradient">Hallvo</span>
             <span className="block text-xs font-semibold text-muted-foreground uppercase tracking-widest">
               Manager
             </span>
@@ -100,19 +120,24 @@ export default function DashboardShell({ children, profile }: DashboardShellProp
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
             const Icon = item.icon
+            const isCurrentLoading = loadingHref === item.href
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setIsSidebarOpen(false)}
+                onClick={() => handleLinkClick(item.href)}
                 className={`flex items-center gap-3 px-4 py-3 text-base font-semibold rounded-xl transition-all duration-150 ${
                   isActive
                     ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
                     : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? 'text-primary-foreground' : 'text-primary'}`} />
+                {isCurrentLoading ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-accent-foreground dark:text-accent" />
+                ) : (
+                  <Icon className={`h-5 w-5 ${isActive ? 'text-primary-foreground' : 'text-primary'}`} />
+                )}
                 {item.name}
               </Link>
             )
